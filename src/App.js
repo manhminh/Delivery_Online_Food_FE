@@ -4,6 +4,7 @@ import { CssBaseline } from "@mui/material";
 import HomePage from "./components/HomePage/HomePage";
 import RestaurantDetails from "./components/Restaurant/RestaurantDetails";
 import { darkTheme } from "./Theme/darkTheme";
+import Cart from "./components/Cart/Cart";
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
       <Navbar />
 
       {/* <HomePage /> */}
-      <RestaurantDetails />
+      {/* <RestaurantDetails /> */}
+      <Cart />
     </ThemeProvider>
   );
 }
