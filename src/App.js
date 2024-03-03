@@ -1,10 +1,9 @@
 import { ThemeProvider } from "@emotion/react";
-import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import { darkTheme } from "./Theme/DarkTheme";
 import { CssBaseline } from "@mui/material";
 import HomePage from "./components/HomePage/HomePage";
 import RestaurantDetails from "./components/Restaurant/RestaurantDetails";
+import { darkTheme } from "./Theme/darkTheme";
 
 function App() {
   return (
