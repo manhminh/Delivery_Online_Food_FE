@@ -36,10 +36,12 @@ const HomePage = () => {
           Order From Our Handpicked Favourites
         </h1>
 
-        <div className="flex flex-wrap justify-around items-center gap-5">
-          {restaurants.map((item, index) => (
-            <RestaurantCard key={index} />
-          ))}
+        <div className="flex justify-center">
+          <div className="flex flex-wrap justify-around items-center gap-5">
+            {restaurants.map((item, index) => (
+              <RestaurantCard key={index} />
+            ))}
+          </div>
         </div>
 
         <div></div>

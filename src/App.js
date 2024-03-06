@@ -1,20 +1,20 @@
 import { ThemeProvider } from "@emotion/react";
-import Navbar from "./components/Navbar/Navbar";
 import { CssBaseline } from "@mui/material";
-import HomePage from "./components/HomePage/HomePage";
-import RestaurantDetails from "./components/Restaurant/RestaurantDetails";
 import { darkTheme } from "./Theme/darkTheme";
-import Cart from "./components/Cart/Cart";
+import CustomerRoutes from "./routes/CustomerRoutes";
 
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Navbar />
+      {/* <Navbar /> */}
 
       {/* <HomePage /> */}
       {/* <RestaurantDetails /> */}
-      <Cart />
+      {/* <Cart /> */}
+      {/* <Profile /> */}
+
+      <CustomerRoutes />
     </ThemeProvider>
   );
 }
