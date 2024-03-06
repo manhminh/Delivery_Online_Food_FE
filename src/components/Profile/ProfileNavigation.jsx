@@ -8,6 +8,8 @@ import EventIcon from "@mui/icons-material/Event";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Divider, Drawer, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/user/userAction";
 
 const ProfileNavigation = ({ open, handleClose }) => {
   const menu = [
@@ -24,8 +26,15 @@ const ProfileNavigation = ({ open, handleClose }) => {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const handleNavigate = (title) => {
-    navigate(`/my-profile/${title}`);
+    if (title === "logout") {
+      dispatch(logout());
+      navigate("/");
+    } else {
+      navigate(`/my-profile/${title}`);
+    }
   };
 
   return (

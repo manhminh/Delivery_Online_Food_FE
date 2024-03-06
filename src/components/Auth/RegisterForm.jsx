@@ -1,8 +1,8 @@
 import {
   Button,
   FormControl,
+  FormHelperText,
   Grid,
-  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 import { Field, Form, Formik } from "formik";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../redux/user/userAction";
+import * as Yup from "yup";
 
 const RegisterForm = () => {
   const initialValues = {
@@ -20,11 +23,38 @@ const RegisterForm = () => {
     role: "",
   };
 
+  const validationSchema = Yup.object({
+    fullName: Yup.string().required("FullName is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(3, "Password must be at least 3 characters")
+      .max(16, "Password must not exceed 16 characters")
+      .required("Password is required"),
+    role: Yup.string().notOneOf(["", "NONE_ROLE"], "Role is required"),
+  });
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
     console.log("form values: ", values);
+    dispatch(registerUser({ userData: values, navigate }));
   };
+
+  const CustomInputComponent = ({
+    field, // { name, value, onChange, onBlur }
+    form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+    ...props
+  }) => (
+    <div>
+      <input type="text" {...field} {...props} />
+      {touched[field.name] && errors[field.name] && (
+        <div className="error">{errors[field.name]}</div>
+      )}
+    </div>
+  );
 
   return (
     <div>
@@ -33,7 +63,11 @@ const RegisterForm = () => {
       </Typography>
 
       <div className="py-3">
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Formik
+          validationSchema={validationSchema}
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+        >
           {({ errors, touched }) => (
             <Form>
               <Grid container spacing={3}>
@@ -87,19 +121,24 @@ const RegisterForm = () => {
 
                 <Grid item xs={12}>
                   <FormControl fullWidth>
-                    <InputLabel id="role-select">Role</InputLabel>
-
                     <Field
                       variant="outlined"
                       as={Select}
-                      labelId="role-select"
                       name="role"
+                      error={errors.role && touched.role}
                     >
+                      <MenuItem value={"NONE_ROLE"}>Select Role</MenuItem>
                       <MenuItem value={"ROLE_CUSTOMER"}>Customer</MenuItem>
                       <MenuItem value={"ROLE_RESTAURANT_OWNER"}>
                         Restaurant Owner
                       </MenuItem>
                     </Field>
+
+                    {errors.role && touched.role ? (
+                      <FormHelperText>
+                        <span className="text-red-500">{errors.role}</span>
+                      </FormHelperText>
+                    ) : null}
                   </FormControl>
                 </Grid>
 
