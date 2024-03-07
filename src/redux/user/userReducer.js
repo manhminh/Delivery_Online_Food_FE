@@ -61,6 +61,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         user: action.payload,
+        favorites: [],
       };
 
     case RESGISTER_USER_FAILURE:

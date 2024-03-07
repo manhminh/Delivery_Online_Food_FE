@@ -88,8 +88,8 @@ export const addToFavorite = (restaurantId) => async (dispatch) => {
   dispatch({ type: ADD_TO_FAVORITE_REQUEST });
 
   try {
-    let { data } = await api.post(
-      `/api/restaurant/${restaurantId}/add-to-favorite`
+    let { data } = await api.put(
+      `/api/restaurants/${restaurantId}/add-to-favorites`
     );
 
     dispatch({ type: ADD_TO_FAVORITE_SUCCESS, payload: data });

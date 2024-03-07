@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./HomePage.css";
 import MultiItemsCarousel from "./MultiItemsCarousel";
 import RestaurantCard from "../Restaurant/RestaurantCard";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllRestaurants } from "../../redux/restaurant/restaurantAction";
 
 const HomePage = () => {
-  const restaurants = [1, 1, 1, 1, 1];
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllRestaurants());
+  }, []);
+
+  const restaurant = useSelector((state) => state.restaurant);
+  console.log("restaurant: ", restaurant);
 
   return (
     <div className="pb-10">
@@ -38,8 +47,8 @@ const HomePage = () => {
 
         <div className="flex justify-center">
           <div className="flex flex-wrap justify-around items-center gap-5">
-            {restaurants.map((item, index) => (
-              <RestaurantCard key={index} />
+            {restaurant.restaurants.map((item, index) => (
+              <RestaurantCard key={index + 1} item={item} />
             ))}
           </div>
         </div>
