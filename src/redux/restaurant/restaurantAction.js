@@ -55,7 +55,7 @@ export const getAllRestaurants = () => async (dispatch) => {
 export const getRestaurantById = (id) => async (dispatch) => {
   dispatch({ type: GET_RESTAURANT_BY_ID_REQUEST });
   try {
-    let data = await api.get(`/api/restaurant/${id}`);
+    let { data } = await api.get(`/api/restaurants/${id}`);
     dispatch({ type: GET_RESTAURANT_BY_ID_SUCCESS, payload: data });
     console.log("get restaurant by id success: ", data);
   } catch (error) {
@@ -200,7 +200,7 @@ export const createCategory = (reqData) => async (dispatch) => {
 export const getRestaurantsCategory = (id) => async (dispatch) => {
   dispatch({ type: GET_RESTAURANTS_CATEGORY_REQUEST });
   try {
-    let { data } = await api.get(`/api/admin/categories/restaurant/${id}`);
+    let { data } = await api.get(`/api/categories/restaurant/${id}`);
 
     dispatch({ type: GET_RESTAURANTS_CATEGORY_SUCCESS, payload: data });
     console.log("get restaurants category success: ", data);

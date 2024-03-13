@@ -10,7 +10,7 @@ const Favorites = () => {
 
       <div className="my-10">
         <div className="flex flex-wrap justify-around gap-3">
-          {auth.user.favorites.map((item, index) => (
+          {auth.user?.favorites.map((item, index) => (
             <RestaurantCard key={index} item={item} />
           ))}
         </div>

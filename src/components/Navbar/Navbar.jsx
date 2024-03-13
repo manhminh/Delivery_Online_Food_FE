@@ -12,6 +12,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const auth = useSelector((state) => state.auth);
+  const cart = useSelector((state) => state.cart);
 
   const handleAvatarClick = () => {
     if (auth.user?.role === "ROLE_RESTAURANT_OWNER") {
@@ -55,8 +56,8 @@ const Navbar = () => {
         </div>
 
         <div>
-          <IconButton>
-            <Badge color="black" badgeContent={4}>
+          <IconButton onClick={() => navigate("/cart")}>
+            <Badge color="black" badgeContent={cart.cartItems.length}>
               <ShoppingCartIcon sx={{ fontSize: "1.5rem" }} />
             </Badge>
           </IconButton>

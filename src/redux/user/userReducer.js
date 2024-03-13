@@ -48,12 +48,22 @@ export const authReducer = (state = initialState, action) => {
       };
 
     case ADD_TO_FAVORITE_SUCCESS:
+      console.log(action.payload);
       return {
         ...state,
         isLoading: false,
         favorites: isPresentInFavorites(state.favorites, action.payload)
           ? state.favorites.filter((item) => item.id !== action.payload.id)
           : [action.payload, ...state.favorites],
+
+        user: {
+          ...state.user,
+          favorites: isPresentInFavorites(state.user.favorites, action.payload)
+            ? state.user.favorites.filter(
+                (item) => item.id !== action.payload.id
+              )
+            : [action.payload, ...state.user.favorites],
+        },
       };
 
     case GET_USER_SUCCESS:

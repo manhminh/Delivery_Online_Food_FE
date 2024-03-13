@@ -5,15 +5,25 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { isPresentInFavorites } from "../../utils/logic";
 import { useDispatch, useSelector } from "react-redux";
 import { addToFavorite } from "../../redux/user/userAction";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantCard = ({ item }) => {
   const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   const handleAddToFavorites = () => {
     dispatch(addToFavorite(item.id));
   };
+
+  const handleNavigateToRestaurant = () => {
+    if (item.open) {
+      navigate(`/restaurant/${item.address.city}/${item.name}/${item.id}`);
+    }
+  };
+
   return (
     <Card className="w-[18rem]">
       <div
@@ -31,14 +41,19 @@ const RestaurantCard = ({ item }) => {
 
       <div className="p-4 textPart lg:flex w-full justify-between">
         <div>
-          <p className="font-semibold text-lg">{item.name}</p>
+          <p
+            className="font-semibold text-lg cursor-pointer"
+            onClick={handleNavigateToRestaurant}
+          >
+            {item.name}
+          </p>
 
           <p className="text-sm text-gray-500">{item.description}</p>
         </div>
 
         <div>
           <IconButton onClick={handleAddToFavorites}>
-            {isPresentInFavorites(auth.favorites, item) ? (
+            {isPresentInFavorites(auth.user?.favorites, item) ? (
               <FavoriteIcon color="error" />
             ) : (
               <FavoriteBorderIcon />

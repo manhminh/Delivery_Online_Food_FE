@@ -7,14 +7,19 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import MenuCard from "./MenuCard";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  getRestaurantById,
+  getRestaurantsCategory,
+} from "../../redux/restaurant/restaurantAction";
+import { getMenuItemByRestaurantId } from "../../redux/menu/menuAction";
 
 const RestaurantDetails = () => {
-  const categories = ["pizza", "sandwich", "sashimi", "kebab", "burger"];
-
   const foodTypes = [
     { label: "All", value: "all" },
     { label: "Vegetarian only", value: "vegetarian" },
@@ -22,13 +27,45 @@ const RestaurantDetails = () => {
     { label: "Seasonal", value: "seasonal" },
   ];
 
-  const menu = [1, 1, 1, 1, 1];
-
   const [foodType, setFoodType] = React.useState("all");
 
-  const handleFilter = (e) => {
-    console.log(e.target.value, e.target.name);
+  const handleFilter = (e, value) => {
+    setFoodType(value);
   };
+
+  const auth = useSelector((state) => state.auth);
+
+  const restaurant = useSelector((state) => state.restaurant);
+
+  const menu = useSelector((state) => state.menu);
+
+  const [selectedCategory, setSelectedCategory] = React.useState("");
+
+  const { id } = useParams();
+
+  const dispatch = useDispatch();
+
+  const handleSelectedCategory = (e, value) => {
+    setSelectedCategory(value);
+    console.log(value);
+  };
+
+  useEffect(() => {
+    dispatch(getRestaurantById(id));
+    dispatch(getRestaurantsCategory(id));
+  }, [id]);
+
+  useEffect(() => {
+    dispatch(
+      getMenuItemByRestaurantId({
+        restaurantId: id,
+        isVegetarian: foodType === "vegetarian",
+        isNonVeg: foodType === "non_vegetarian",
+        isSeasonal: foodType === "seasonal",
+        foodCategory: selectedCategory,
+      })
+    );
+  }, [selectedCategory, id, foodType]);
 
   return (
     <div className="px-5 lg:px-20">
@@ -42,7 +79,7 @@ const RestaurantDetails = () => {
             <Grid item xs={12}>
               <img
                 className="w-full h-[40vh] object-cover"
-                src="https://images.pexels.com/photos/460537/pexels-photo-460537.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                src={restaurant.restaurant?.images[0]}
                 alt=""
               />
             </Grid>
@@ -50,7 +87,11 @@ const RestaurantDetails = () => {
             <Grid item xs={12} lg={6}>
               <img
                 className="w-full h-[40vh] object-cover"
-                src="https://images.pexels.com/photos/460537/pexels-photo-460537.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src={
+                  restaurant.restaurant?.images[1]
+                    ? restaurant.restaurant?.images[1]
+                    : restaurant.restaurant?.images[0]
+                }
                 alt=""
               />
             </Grid>
@@ -58,7 +99,11 @@ const RestaurantDetails = () => {
             <Grid item xs={12} lg={6}>
               <img
                 className="w-full h-[40vh] object-cover"
-                src="https://images.pexels.com/photos/460537/pexels-photo-460537.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src={
+                  restaurant.restaurant?.images[2]
+                    ? restaurant.restaurant?.images[2]
+                    : restaurant.restaurant?.images[0]
+                }
                 alt=""
               />
             </Grid>
@@ -66,13 +111,11 @@ const RestaurantDetails = () => {
         </div>
 
         <div className="pt-3 pb-5">
-          <h1 className="text-4xl font-semibold">American Fast Food</h1>
+          <h1 className="text-4xl font-semibold">
+            {restaurant.restaurant?.name}
+          </h1>
           <p className="text-gray-500 mt-1">
-            It is a long established fact that a reader will be distracted by
-            the readable content of a page when looking at its layout. The point
-            of using Lorem Ipsum is that it has a more-or-less normal
-            distribution of letters, as opposed to using 'Content here, content
-            here', making it look like readable English.
+            {restaurant.restaurant?.description}
           </p>
 
           <div className="space-y-3 mt-3">
@@ -128,16 +171,16 @@ const RestaurantDetails = () => {
 
               <FormControl className="py-10 space-y-5" component={"fieldset"}>
                 <RadioGroup
-                  onChange={handleFilter}
-                  name="food_type"
-                  value={foodType}
+                  onChange={handleSelectedCategory}
+                  name="food_category"
+                  value={selectedCategory}
                 >
-                  {categories.map((item, index) => (
+                  {restaurant?.categories.map((item, index) => (
                     <FormControlLabel
                       key={index + 1}
-                      value={item}
+                      value={item.name}
                       control={<Radio />}
-                      label={item}
+                      label={item.name}
                     />
                   ))}
                 </RadioGroup>
@@ -146,9 +189,9 @@ const RestaurantDetails = () => {
           </div>
         </div>
 
-        <div className="lg:w-[80%] lg:pl-10 space-y-5">
-          {menu.map((item, index) => (
-            <MenuCard />
+        <div className="lg:w-[80%] lg:pl-10 pb-8 space-y-5">
+          {menu.menuItems.map((item, index) => (
+            <MenuCard item={item} key={index} />
           ))}
         </div>
       </section>

@@ -49,11 +49,28 @@ const cartReducer = (state = initialState, action) => {
       };
 
     case ADD_ITEM_TO_CART_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        cartItems: [...state.cartItems, action.payload],
-      };
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+
+      if (existingItemIndex !== -1) {
+        // Item already exists in cart, increment quantity
+        const updatedCartItems = [...state.cartItems];
+        updatedCartItems[existingItemIndex].quantity += 1;
+
+        return {
+          ...state,
+          isLoading: false,
+          cartItems: updatedCartItems,
+        };
+      } else {
+        // Item doesn't exist in cart, add it to the array
+        return {
+          ...state,
+          isLoading: false,
+          cartItems: [...state.cartItems, action.payload],
+        };
+      }
 
     case UPDATE_CART_ITEM_SUCCESS:
       return {

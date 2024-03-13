@@ -8,6 +8,8 @@ import Navbar from "../components/Navbar/Navbar";
 import Auth from "../components/Auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../redux/user/userAction";
+import { findCart } from "../redux/cart/cartAction";
+import PaymentSuccess from "../components/Payment/PaymentSuccess";
 
 const CustomerRoutes = () => {
   const auth = useSelector((state) => state.auth);
@@ -20,7 +22,8 @@ const CustomerRoutes = () => {
 
   useEffect(() => {
     if (auth.jwt || jwt) {
-      dispatch(getUser(jwt));
+      dispatch(getUser());
+      dispatch(findCart());
     }
   }, [auth.jwt, jwt]);
 
@@ -37,6 +40,7 @@ const CustomerRoutes = () => {
         />
         <Route path="/cart" element={<Cart />} />
         <Route path="/my-profile/*" element={<Profile />} />
+        <Route path="/payment/success/:id" element={<PaymentSuccess />} />
       </Routes>
 
       <Auth />

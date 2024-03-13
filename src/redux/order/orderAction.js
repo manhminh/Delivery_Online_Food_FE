@@ -1,3 +1,5 @@
+import { South } from "@mui/icons-material";
+import api from "../../config/api";
 import {
   CREATE_ORDER_FAILURE,
   CREATE_ORDER_REQUEST,
@@ -16,8 +18,9 @@ export const createOrder = (reqData) => async (dispatch) => {
   try {
     let { data } = await api.post(`/api/orders`, reqData.orderData);
 
-    if (data.payment_url) {
-      window.location.href = data.payment_url;
+    if (data.paymentUrl) {
+      window.location.href = data.paymentUrl;
+      console.log(data);
     }
 
     dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });

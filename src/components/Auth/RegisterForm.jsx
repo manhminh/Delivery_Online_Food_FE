@@ -106,6 +106,7 @@ const RegisterForm = () => {
                 <Grid item xs={12}>
                   <Field
                     name="password"
+                    type="password"
                     label="Password"
                     variant="outlined"
                     fullWidth
@@ -127,7 +128,6 @@ const RegisterForm = () => {
                       name="role"
                       error={errors.role && touched.role}
                     >
-                      <MenuItem value={"NONE_ROLE"}>Select Role</MenuItem>
                       <MenuItem value={"ROLE_CUSTOMER"}>Customer</MenuItem>
                       <MenuItem value={"ROLE_RESTAURANT_OWNER"}>
                         Restaurant Owner

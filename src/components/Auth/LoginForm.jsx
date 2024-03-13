@@ -26,17 +26,11 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const [errorMessage, setErrorMessage] = React.useState("");
-
   const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
     console.log("form values: ", values);
     dispatch(loginUser({ userData: values, navigate }));
-
-    if (auth.error) {
-      setErrorMessage("Invalid email or password");
-    }
   };
 
   return (
@@ -74,6 +68,7 @@ const LoginForm = () => {
                 <Field
                   name="password"
                   label="Password"
+                  type="password"
                   variant="outlined"
                   fullWidth
                   as={TextField}
@@ -85,12 +80,6 @@ const LoginForm = () => {
                   }
                 />
               </Grid>
-
-              {errorMessage && (
-                <Grid item xs={12}>
-                  <p className="text-red-500">{errorMessage}</p>
-                </Grid>
-              )}
 
               <Grid item xs={12}>
                 <Button

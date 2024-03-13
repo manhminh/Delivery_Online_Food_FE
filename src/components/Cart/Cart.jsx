@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder } from "../../redux/order/orderAction";
 
 const Cart = () => {
   const style = {
@@ -20,6 +22,9 @@ const Cart = () => {
     boxShadow: 24,
     p: 4,
   };
+
+  const cart = useSelector((state) => state.cart);
+  const auth = useSelector((state) => state.auth);
 
   const [openAddressModal, setOpenAddressModal] = React.useState(false);
   const handleSelectAddress = () => {};
@@ -46,16 +51,34 @@ const Cart = () => {
     city: Yup.string().required("City is required"),
   });
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (value) => {
     console.log(value);
+    const reqData = {
+      orderData: {
+        restaurantId: cart.cartItems[0].food?.restaurant.id,
+        deliveryAddress: {
+          streetAddress: value.streetAddress,
+          city: value.city,
+          state: value.state,
+          pinCode: value.pinCode,
+          country: "America",
+        },
+      },
+    };
+
+    dispatch(createOrder(reqData));
   };
+
+  console.log(cart);
 
   return (
     <div>
       <main className="lg:flex justify-between">
         <section className="lg:w-[30%] space-y-6 lg:min-h-screen pt-10">
-          {[1, 1, 1].map((item) => (
-            <CartItem />
+          {cart.cartItems.map((item) => (
+            <CartItem item={item} />
           ))}
 
           <Divider />
@@ -66,7 +89,13 @@ const Cart = () => {
             <div className="space-y-3">
               <div className="flex justify-between text-gray-400">
                 <p>Item Total</p>
-                <p>$599</p>
+                <p>
+                  $
+                  {cart.cartItems.reduce(
+                    (total, item) => total + item.price,
+                    0
+                  )}
+                </p>
               </div>
 
               <div className="flex justify-between text-gray-400">
@@ -90,7 +119,13 @@ const Cart = () => {
             <div className="flex justify-between text-gray-400 pt-3">
               <p>Total Pay</p>
 
-              <p>$3300</p>
+              <p>
+                $
+                {cart.cartItems.reduce((total, item) => total + item.price, 0) +
+                  20 +
+                  12 +
+                  33}
+              </p>
             </div>
           </div>
         </section>
